@@ -12,16 +12,36 @@ export default class View {
     }
 
     renderTask(taskObject) {
-        const taskHTML = `<li class="todo-item" id="${taskObject.id}">
+        const completedTask = taskObject.done ? 'completed' : '';
+        const checkedTask = taskObject.done ? 'checked' : '';
+
+        const taskHTML = `<li class="todo-item" data-id="${taskObject.id}">
             <label class="todo-item-label">
-                <input class="checkbox" type="checkbox" />
-                <span>${taskObject.value}</span>
-                <button class="btn btn-secondary btn-sm">Удалить</button>
+                <input class="checkbox" type="checkbox" ${checkedTask}/>
+                <span class="${completedTask}">${taskObject.value}</span>
+                <button class="btn btn-secondary btn-sm" data-action="delete">Удалить</button>
             </label>
         </li>`;
 
         this.elements.list.insertAdjacentHTML('beforeend', taskHTML);
     }
+
+    statusTask(taskObj) {
+        const task = this.elements.list.querySelector(`[data-id="${taskObj.id}"]`);
+        const taskSpan = task.querySelector('span');
+
+        if(taskObj.done === true) {
+            taskSpan.classList.add('completed');
+        }else {
+            taskSpan.classList.remove('completed');
+        }
+    }
+
+    removeTask(taskObj) {
+        const parentEl = this.elements.list.querySelector(`[data-id="${taskObj.id}"]`);
+        parentEl.remove();
+    }
+
     clearInput() {
         this.elements.input.value = '';
     }

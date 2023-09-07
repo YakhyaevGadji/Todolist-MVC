@@ -24,6 +24,38 @@ export default class Model {
         return infoTask;
     }
 
+    forTask(id) {
+        const task = this.tasks.find((task) => {
+            if(task.id === Number(id)) {
+                return true;
+            }
+        });
+
+        return task;
+    }
+
+    statusTask(taskObj) {
+        if(taskObj.done === false) {
+            taskObj.done = true;
+        }else {
+            taskObj.done = false;
+        }
+        
+        this.saveToLocalstorage();
+    }
+
+    removeTask(taskObj) {
+        const date = this.tasks.findIndex((task) => {
+            if(taskObj.id === task.id) {
+                return true;
+            }
+        });
+
+        this.tasks.splice(date, 1);
+
+        this.saveToLocalstorage();
+    }
+
     saveToLocalstorage() {
         localStorage.setItem('tasks', JSON.stringify(this.tasks));
     }
